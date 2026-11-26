@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SS Skins</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    body {
+      padding: 16px;
+      background: #0d1015;
+      color: #f3f6fa;
+      transition: background 0.25s, color 0.25s;
+    }
+    body.light-theme {
+      background: #ffffff;
+      color: #0f172a;
+    }
+    .box {
+      max-width: 440px;
+      margin: 0 auto;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 16px;
+      background: #161b22;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    body.light-theme .box {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+    .theme-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .theme-switch input {
+      display: none;
+    }
+    .switch-track {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 999px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .switch-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #22c55e;
+      border-radius: 50%;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .theme-switch input:checked + .switch-track {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+    .theme-switch input:checked + .switch-track .switch-thumb {
+      transform: translateX(24px);
+      background: #0f172a;
+    }
+    .center-start {
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+    }
+    .logo-text {
+      font-size: 26px;
+      font-weight: 800;
+      color: #22c55e;
+    }
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-green {
+      background: #16a34a;
+      color: #ffffff;
+    }
+    .btn-start {
+      width: auto;
+      padding: 13px 32px;
+    }
+    .btn-tg {
+      background: #0284c7;
+      color: #ffffff;
+      margin-top: 10px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .header h2 {
+      font-size: 17px;
+    }
+    .reset-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    body.light-theme .reset-btn {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .upload-label {
+      display: block;
+      border: 2px dashed #16a34a;
+      border-radius: 12px;
+      padding: 24px 12px;
+      text-align: center;
+      color: #22c55e;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    body.light-theme .upload-label {
+      color: #16a34a;
+    }
+    .img-stage {
+      position: relative;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .img-stage img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .crop-frame {
+      position: absolute;
+      border: 2px solid #16a34a;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+      display: none;
+      touch-action: none;
+    }
+    .handle {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #16a34a;
+      border-radius: 50%;
+    }
+    .h-nw { top: -8px; left: -8px; }
+    .h-ne { top: -8px; right: -8px; }
+    .h-sw { bottom: -8px; left: -8px; }
+    .h-se { bottom: -8px; right: -8px; }
+
+    .options {
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    body.light-theme .options {
+      border-color: #cbd5e1;
+    }
+    .opt-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .opt-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: #16a34a;
+      flex-shrink: 0;
+    }
+    .result-card {
+      margin-top: 12px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    body.light-theme .result-card {
+      border-color: #cbd5e1;
+    }
+    .result-card img {
+      display: block;
+      width: 100%;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="top-bar">
+      <label class="theme-switch" title="Chap: Qora | O'ng: Oq">
+        <span id="themeLabel">Qora</span>
+        <input type="checkbox" id="themeToggle" />
+        <span class="switch-track">
+          <span class="switch-thumb"></span>
+        </span>
+      </label>
+    </div>
+
+    <div id="page1" class="center-start">
+      <div class="logo-text">SS SKINS</div>
+      <div style="font-size:14px;">CS2 skin rasmini kesish va tayyorlash</div>
+      <button type="button" id="startBtn" class="btn btn-green btn-start">Boshlash</button>
+    </div>
+
+    <div id="page2" style="display:none;">
+      <div class="header">
+        <h2>Rasmni tayyorlash</h2>
+        <button type="button" id="resetBtn" class="reset-btn">Qayta boshlash</button>
+      </div>
+
+      <label for="filePicker" id="uploadArea" class="upload-label">
+        Skrinshotni tanlang
+      </label>
+      <input type="file" id="filePicker" accept="image/*" style="display:none;" />
+
+      <div id="workArea" style="display:none;">
+        <div id="imgStage" class="img-stage">
+          <img id="sourceImg" alt="Yuklangan rasm" />
+          <div id="cropFrame" class="crop-frame">
+            <div class="handle h-nw" data-dir="nw"></div>
+            <div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-sw" data-dir="sw"></div>
+            <div class="handle h-se" data-dir="se"></div>
+          </div>
+        </div>
+
+        <div class="options">
+          <label class="opt-row">
+            <input type="checkbox" id="cropCheck" />
+            <span>Chetlarini kesish</span>
+          </label>
+          <label class="opt-row">
+            <input type="checkbox" id="badgeCheck" checked />
+            <span>SS Skins belgisi</span>
+          </label>
+        </div>
+
+        <button type="button" id="makeBtn" class="btn btn-green">Rasmni tayyorlash</button>
+
+        <div id="outputBox" class="result-card" style="display:none;">
+          <img id="outputImg" alt="Tayyor rasm" />
+          <button type="button" id="tgBtn" class="btn btn-tg">Telegram'ga uzatish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var STEP_DELAY = 500;
+      var CHANNEL_URL = "https://t.me/Skinsavdokanali";
+
+      var page1 = document.getElementById("page1");
+      var page2 = document.getElementById("page2");
+      var startBtn = document.getElementById("startBtn");
+      var resetBtn = document.getElementById("resetBtn");
+      var filePicker = document.getElementById("filePicker");
+      var uploadArea = document.getElementById("uploadArea");
+      var workArea = document.getElementById("workArea");
+      var sourceImg = document.getElementById("sourceImg");
+      var cropFrame = document.getElementById("cropFrame");
+      var cropCheck = document.getElementById("cropCheck");
+      var badgeCheck = document.getElementById("badgeCheck");
+      var makeBtn = document.getElementById("makeBtn");
+      var outputBox = document.getElementById("outputBox");
+      var outputImg = document.getElementById("outputImg");
+      var tgBtn = document.getElementById("tgBtn");
+      var themeToggle = document.getElementById("themeToggle");
+      var themeLabel = document.getElementById("themeLabel");
+
+      var loadedImageObj = null;
+      var readyBlob = null;
+      var box = { x: 0.02, y: 0.145, w: 0.96, h: 0.49 };
+
+      function applyTheme() {
+        if (themeToggle.checked) {
+          document.body.classList.add("light-theme");
+          themeLabel.textContent = "Oq";
+        } else {
+          document.body.classList.remove("light-theme");
+          themeLabel.textContent = "Qora";
+        }
+      }
+
+      themeToggle.addEventListener("change", applyTheme);
+      applyTheme();
+
+      startBtn.addEventListener("click", function () {
+        setTimeout(function () {
+          page1.style.display = "none";
+          page2.style.display = "block";
+        }, STEP_DELAY);
+      });
+
+      resetBtn.addEventListener("click", function () {
+        setTimeout(function () {
+          filePicker.value = "";
+          loadedImageObj = null;
+          readyBlob = null;
+          cropCheck.checked = false;
+          cropFrame.style.display = "none";
+          workArea.style.display = "none";
+          outputBox.style.display = "none";
+          uploadArea.style.display = "block";
+        }, STEP_DELAY);
+      });
+
+      function updateFrameUI() {
+        cropFrame.style.left = (box.x * 100) + "%";
+        cropFrame.style.top = (box.y * 100) + "%";
+        cropFrame.style.width = (box.w * 100) + "%";
+        cropFrame.style.height = (box.h * 100) + "%";
+      }
+
+      function findSkinArea(img) {
+        try {
+          var sw = 180;
+          var sh = Math.max(120, Math.round((img.naturalHeight / img.naturalWidth) * sw));
+          var c = document.createElement("canvas");
+          c.width = sw;
+          c.height = sh;
+          var cx = c.getContext("2d");
+          cx.drawImage(img, 0, 0, sw, sh);
+          var px = cx.getImageData(0, 0, sw, sh).data;
+
+          var rows = [];
+          for (var y = 0; y < sh; y++) {
+            var sum = 0, cnt = 0;
+            for (var x = Math.round(sw * 0.15); x < Math.round(sw * 0.85); x += 2) {
+              var i = (y * sw + x) * 4;
+              sum += (px[i] + px[i + 1] + px[i + 2]) / 3;
+              cnt++;
+            }
+            rows.push(sum / cnt);
+          }
+
+          var topY = -1;
+          for (var y = Math.round(sh * 0.10); y < Math.round(sh * 0.45); y++) {
+            if (rows[y] > 55) {
+              topY = y;
+              break;
+            }
+          }
+
+          var botY = -1;
+          if (topY !== -1) {
+            for (var y = topY + Math.round(sh * 0.25); y < Math.round(sh * 0.82); y++) {
+              if (rows[y] > 42) {
+                botY = y + Math.round(sh * 0.035);
+              }
+            }
+            if (botY === -1) {
+              botY = Math.min(sh - 1, topY + Math.round(sh * 0.49));
+            }
+          }
+
+          if (topY !== -1 && botY > topY) {
+            var midY = Math.round((topY + botY) / 2);
+            var lx = 0;
+            while (lx < sw * 0.2) {
+              var i = (midY * sw + lx) * 4;
+              if ((px[i] + px[i + 1] + px[i + 2]) / 3 < 35) lx++;
+              else break;
+            }
+            var rx = sw - 1;
+            while (rx > sw * 0.8) {
+              var i = (midY * sw + rx) * 4;
+              if ((px[i] + px[i + 1] + px[i + 2]) / 3 < 35) rx--;
+              else break;
+            }
+            return {
+              x: Math.max(0, lx / sw),
+              y: Math.max(0, topY / sh),
+              w: Math.min(1, (rx - lx + 1) / sw),
+              h: Math.min(1, (botY - topY) / sh)
+            };
+          }
+        } catch (e) {}
+        return { x: 0.02, y: 0.145, w: 0.96, h: 0.49 };
+      }
+
+      filePicker.addEventListener("change", function (e) {
+        var file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        uploadArea.style.display = "none";
+        workArea.style.display = "block";
+        outputBox.style.display = "none";
+        cropCheck.checked = false;
+        cropFrame.style.display = "none";
+
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          setTimeout(function () {
+            sourceImg.onload = function () {
+              loadedImageObj = sourceImg;
+              box = findSkinArea(sourceImg);
+              updateFrameUI();
+            };
+            sourceImg.src = ev.target.result;
+          }, STEP_DELAY);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      cropCheck.addEventListener("change", function () {
+        if (!loadedImageObj) return;
+        setTimeout(function () {
+          if (cropCheck.checked) {
+            box = findSkinArea(loadedImageObj);
+            updateFrameUI();
+            cropFrame.style.display = "block";
+          } else {
+            cropFrame.style.display = "none";
+          }
+        }, STEP_DELAY);
+      });
+
+      var activeDir = null;
+      var startPos = { x: 0, y: 0 };
+      var startBox = null;
+
+      cropFrame.addEventListener("touchstart", function (e) {
+        if (!cropCheck.checked) return;
+        e.preventDefault();
+        var t = e.touches[0];
+        activeDir = e.target.getAttribute("data-dir") || "move";
+        startPos = { x: t.clientX, y: t.clientY };
+        startBox = { x: box.x, y: box.y, w: box.w, h: box.h };
+      }, { passive: false });
+
+      cropFrame.addEventListener("touchmove", function (e) {
+        if (!activeDir || !startBox) return;
+        e.preventDefault();
+        var t = e.touches[0];
+        var rect = sourceImg.getBoundingClientRect();
+        var dx = (t.clientX - startPos.x) / rect.width;
+        var dy = (t.clientY - startPos.y) / rect.height;
+        var min = 0.12;
+
+        if (activeDir === "move") {
+          box.x = Math.min(1 - startBox.w, Math.max(0, startBox.x + dx));
+          box.y = Math.min(1 - startBox.h, Math.max(0, startBox.y + dy));
+        } else if (activeDir === "se") {
+          box.w = Math.min(1 - startBox.x, Math.max(min, startBox.w + dx));
+          box.h = Math.min(1 - startBox.y, Math.max(min, startBox.h + dy));
+        } else if (activeDir === "nw") {
+          var nx = Math.min(startBox.x + startBox.w - min, Math.max(0, startBox.x + dx));
+          var ny = Math.min(startBox.y + startBox.h - min, Math.max(0, startBox.y + dy));
+          box.w = startBox.w + (startBox.x - nx);
+          box.h = startBox.h + (startBox.y - ny);
+          box.x = nx;
+          box.y = ny;
+        } else if (activeDir === "ne") {
+          var ny2 = Math.min(startBox.y + startBox.h - min, Math.max(0, startBox.y + dy));
+          box.w = Math.min(1 - startBox.x, Math.max(min, startBox.w + dx));
+          box.h = startBox.h + (startBox.y - ny2);
+          box.y = ny2;
+        } else if (activeDir === "sw") {
+          var nx2 = Math.min(startBox.x + startBox.w - min, Math.max(0, startBox.x + dx));
+          box.w = startBox.w + (startBox.x - nx2);
+          box.h = Math.min(1 - startBox.y, Math.max(min, startBox.h + dy));
+          box.x = nx2;
+        }
+        updateFrameUI();
+      }, { passive: false });
+
+      cropFrame.addEventListener("touchend", function () {
+        activeDir = null;
+        startBox = null;
+      });
+
+      makeBtn.addEventListener("click", function () {
+        if (!loadedImageObj) return;
+        makeBtn.disabled = true;
+
+        setTimeout(function () {
+          var iw = loadedImageObj.naturalWidth;
+          var ih = loadedImageObj.naturalHeight;
+
+          var sx = 0, sy = 0, sw = iw, sh = ih;
+          if (cropCheck.checked) {
+            sx = Math.round(box.x * iw);
+            sy = Math.round(box.y * ih);
+            sw = Math.round(box.w * iw);
+            sh = Math.round(box.h * ih);
+          }
+
+          var canvas = document.createElement("canvas");
+          canvas.width = sw;
+          canvas.height = sh;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(loadedImageObj, sx, sy, sw, sh, 0, 0, sw, sh);
+
+          if (badgeCheck.checked) {
+            var fontSize = Math.max(18, Math.round(sw * 0.032));
+            var logoSize = Math.round(fontSize * 1.45);
+            var pad = Math.round(sw * 0.025);
+
+            ctx.font = "700 " + fontSize + "px system-ui, sans-serif";
+            var label = "SS Skins";
+            var textW = ctx.measureText(label).width;
+            var gap = Math.round(fontSize * 0.35);
+
+            var totalW = logoSize + gap + textW;
+            var startX = (sw - totalW) / 2;
+            var centerY = sh - pad - logoSize / 2;
+
+            var pillPadX = Math.round(fontSize * 0.55);
+            var pillPadY = Math.round(fontSize * 0.25);
+            var pillW = totalW + pillPadX * 2;
+            var pillH = logoSize + pillPadY * 2;
+            var pillX = startX - pillPadX;
+            var pillY = centerY - pillH / 2;
+
+            ctx.fillStyle = "rgba(10, 14, 20, 0.75)";
+            ctx.beginPath();
+            if (ctx.roundRect) {
+              ctx.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
+            } else {
+              ctx.rect(pillX, pillY, pillW, pillH);
+            }
+            ctx.fill();
+
+            var logoCx = startX + logoSize / 2;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(logoCx, centerY, logoSize / 2, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            ctx.fillStyle = "#16a34a";
+            ctx.fillRect(startX, centerY - logoSize / 2, logoSize, logoSize);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "800 " + Math.round(logoSize * 0.42) + "px system-ui, sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("SS", logoCx, centerY + 1);
+            ctx.restore();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            ctx.font = "700 " + fontSize + "px system-ui, sans-serif";
+            ctx.fillText(label, startX + logoSize + gap, centerY + 1);
+          }
+
+          canvas.toBlob(function (blob) {
+            readyBlob = blob;
+            outputImg.src = URL.createObjectURL(blob);
+            outputBox.style.display = "block";
+            makeBtn.disabled = false;
+          }, "image/png");
+        }, STEP_DELAY);
+      });
+
+      // Galereyaga yuklamasdan faylni ulashishga urinib ko'radi, bo'lmasa kanalga o'tkazadi
+      tgBtn.addEventListener("click", function () {
+        if (!readyBlob) return;
+        tgBtn.disabled = true;
+
+        setTimeout(function () {
+          var file = new File([readyBlob], "ss_skin.png", { type: "image/png" });
+
+          if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
+            navigator.share({ files: [file] })
+              .catch(function () {
+                window.location.href = CHANNEL_URL;
+              })
+              .finally(function () {
+                tgBtn.disabled = false;
+              });
+          } else {
+            window.location.href = CHANNEL_URL;
+            tgBtn.disabled = false;
+          }
+        }, STEP_DELAY);
+      });
+    })();
+  </script>
+</body>
+</html>
